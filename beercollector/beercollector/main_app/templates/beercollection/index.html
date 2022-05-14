@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+    {% block content %}
+
+        <h1>Beer List</h1>
+
+        {% for beer in allbeers %}
+        <div class="card">
+            <div class="card-content">
+            <span class="card-title">{{ beer.brewery }}</span>
+            <p>Name: {{ beer.name }}</p>
+            <p>Style: {{ beer.style }}</p>
+            {% if beer.abv < 8.0 %}
+                <p>ABV: {{ beer.abv }}%</p>
+            {% else %}
+                <p>High Gravity: {{beer.abv}}% ABV</p>
+            {% endif %}
+            <a href={{beer.url_site}}>{{beer.brewery}}</a>
+            </div>
+        </div>
+        {% endfor %}
+
+    {% endblock %}
