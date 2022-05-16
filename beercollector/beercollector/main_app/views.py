@@ -6,7 +6,8 @@ from .models import The_beer
 from django.http import HttpResponse
 
 def home(request):
-    return HttpResponse('<h1>HELLO THERE</h1>')
+    # return HttpResponse('<h1>HELLO THERE</h1>')
+    return render(request, 'home.html')
 
 def about(request):
     return render(request, 'about.html')
