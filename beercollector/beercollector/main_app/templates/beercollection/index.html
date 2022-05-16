@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
     {% block content %}
 
-        <h1>Beer List</h1>
+        <h1>List of Beers in Collection</h1>
 
-        {% for beer in allbeers %}
+        {% for beer in all_beers %}
         <div class="card">
             <div class="card-content">
             <span class="card-title">{{ beer.brewery }}</span>

@@ -12,7 +12,8 @@ def about(request):
     return render(request, 'about.html')
 
 def beer_index(request):
-    return render(request, 'beercollection/index.html', {'allbeers': beers_in_collection})
+    all_beers = The_beer.objects.all()
+    return render(request, 'beercollection/index.html', {'all_beers': all_beers})
 
 def beer_details(request, beer_id):
     beer = The_beer.objects.get(id=beer_id)
