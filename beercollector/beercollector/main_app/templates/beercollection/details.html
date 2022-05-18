@@ -15,6 +15,10 @@
     {% endif %}
     <a href={{beer.url_site}} target="_blank">{{beer.brewery}}</a>
   </div>
+  <div class="card-action">
+    <a href="{% url 'beer_update' beer.id %}">Edit</a>
+    <a href="{% url 'beer_delete' beer.id %}">Delete</a>
+  </div>
 </div>
 
 {% endblock %}
