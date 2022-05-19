@@ -46,6 +46,13 @@ class TheBeer(models.Model):
 #     TheBeer('Moonraker Brewing Co', 'Thunder Cabbage', 'New England Triple IPA', 10.0, 'https://taplist.io/taplist-198630'),
 # ]
 
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    beer = models.ForeignKey(TheBeer, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Photo fro beer_id: {self.beer_id} @{self.url}"
+
 class BeerSampling(models.Model):
     date = models.DateField('Date Sampled')
     weekday = models.CharField(
