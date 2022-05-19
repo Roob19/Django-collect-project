@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('date', models.DateField(verbose_name='Date Sampled')),
-                ('weekday', models.CharField(choices=[('Su', 'Sunday'), ('Mo', 'Monday'), ('Tu', 'Tuesday'), ('We', 'Wednesday'), ('Th', 'Thursday'), ('Fr', 'Friday'), ('Sa', 'Saturday')], default='Su', max_length=2)),
+                ('drink', models.CharField(choices=[('Su', 'Sunday'), ('Mo', 'Monday'), ('Tu', 'Tuesday'), ('We', 'Wednesday'), ('Th', 'Thursday'), ('Fr', 'Friday'), ('Sa', 'Saturday')], default='Su', max_length=2)),
                 ('beer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='main_app.thebeer')),
             ],
             options={

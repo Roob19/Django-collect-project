@@ -38,7 +38,7 @@
             {% for beersampling in beer.beersampling_set.all %}
             <tr>
                 <td>{{beersampling.date}}</td>
-                <td>{{beersampling.get_weekday_display}}</td>
+                <td>{{beersampling.get_drink_display}}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -110,7 +110,7 @@
         setDefaultDate: true,
         autoClose: true
     });
-    const selectEl = document.getElementById('id_weekday');
+    const selectEl = document.getElementById('id_drink');
         M.FormSelect.init(selectEl);
 </script>
 {% endblock %}

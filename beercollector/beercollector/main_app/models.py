@@ -1,14 +1,13 @@
 from django.db import models
 from django.urls import reverse
 
-WEEKDAYS = (
-    ('Su', 'Sunday'),
-    ('Mo', 'Monday'),
-    ('Tu', 'Tuesday'),
-    ('We', 'Wednesday'),
-    ('Th', 'Thursday'),
-    ('Fr', 'Friday'),
-    ('Sa', 'Saturday')
+DRINKS = (
+    ('Morning', 'Morning'),
+    ('Noon', 'Noon'),
+    ('Afternoon', 'Afternoon'),
+    ('Evening', 'Evening'),
+    ('Latenight', 'Latenight'),
+    ('Madrugada', 'Madrugada')
 )
 
 class Hop(models.Model):
@@ -55,14 +54,14 @@ class Photo(models.Model):
 
 class BeerSampling(models.Model):
     date = models.DateField('Date Sampled')
-    weekday = models.CharField(
-        max_length=2, 
-        choices=WEEKDAYS, 
-        default=WEEKDAYS[0][0]
+    drink = models.CharField(
+        max_length=25, 
+        choices=DRINKS, 
+        default=DRINKS[0][0]
         )
 
     def __str__(self):
-        return f"{self.get_weekday_display()} on {self.date}"
+        return f"{self.get_drink_display()} on {self.date}"
 
     beer = models.ForeignKey(TheBeer, on_delete=models.CASCADE)
 
