@@ -22,8 +22,13 @@
         </ul>
         <ul class="right">
           <li><a href="{% url 'about' %}">About</a></li>
-          <li><a href="{% url 'beer_create' %}">Add a Beer</a></li>
-          <li><a href="{% url 'index' %}">All Beers</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'beer_create' %}">Add a Beer</a></li>
+            <li><a href="{% url 'index' %}">All Beers</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+          {% else %}
+            <li><a href="{% url 'login' %}">Log IN</a></li>
+          {% endif %}
         </ul>
       </div>
     </nav>

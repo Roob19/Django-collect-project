@@ -60,8 +60,11 @@ def assoc_hop(request, beer_id, hop_id):
 class BeerCreate(CreateView):
     model = TheBeer
     fields = ['brewery', 'name', 'style', 'abv', 'url_site']
-    def get_success_url(self, **kwargs):
-        return reverse('details', args=(self.object.id,))
+    # def get_success_url(self, **kwargs):
+    #     return reverse('details', args=(self.object.id,))
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 class BeerUpdate(UpdateView):
     model = TheBeer

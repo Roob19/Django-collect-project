@@ -52,7 +52,7 @@ class Photo(models.Model):
     beer = models.ForeignKey(TheBeer, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"Photo fro beer_id: {self.beer_id} @{self.url}"
+        return f"Photo for beer_id: {self.beer_id} @{self.url}"
 
 class BeerSampling(models.Model):
     date = models.DateField('Date Sampled')
