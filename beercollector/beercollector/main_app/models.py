@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 DRINKS = (
     ('Morning', 'Morning'),
@@ -35,6 +36,7 @@ class TheBeer(models.Model):
     abv = models.DecimalField(max_digits=3, decimal_places=1)
     url_site = models.CharField(max_length=254, blank=True)
     hops = models.ManyToManyField(Hop)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
