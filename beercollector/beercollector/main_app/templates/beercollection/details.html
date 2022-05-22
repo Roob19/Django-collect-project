@@ -16,12 +16,21 @@
                 <p>ABV: {{ beer.abv }}%</p>
                 {% endif %}
                 <a href={{beer.url_site}} target="_blank">Visit {{beer.brewery}} Brewing Company</a>
+                
             </div>
         </br>
-            <div class="card-action">
-                <a href="{% url 'beer_update' beer.id %}">Edit</a>
-                <a href="{% url 'beer_delete' beer.id %}">Delete</a>
-            </div>
+            {% if user == beer.user %}
+                <div class="card-action">
+                    <a href="{% url 'beer_update' beer.id %}">Edit</a>
+                    <a href="{% url 'beer_delete' beer.id %}">Delete</a>
+                </div>
+            {% else %}
+                <div class="card-action">
+                    Details contributed by: {{ beer.user }} 
+                </div>
+            {% endif %}
+
+
         </div>
     </div>
     <div class=“col s6”>
@@ -89,11 +98,12 @@
              {{ hop.name }}
             </span>
           </div>
-
           <div class="card-action">
             <form action="{% url 'assoc_hop' beer.id hop.id %}" method="post">
               {% csrf_token %}
-              <button type="submit" class="btn">Add</button>
+              {% if user == beer.user %}
+                <button type="submit" class="btn">Add</button>
+              {% endif %}
             </form>
           </div>
         </div>

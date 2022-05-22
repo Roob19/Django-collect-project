@@ -24,12 +24,17 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
-@Login_required
+@login_required
 def beer_index(request):
     all_beers = TheBeer.objects.all()
     return render(request, 'beercollection/index.html', {'all_beers': all_beers})
 
-@Login_required
+@login_required
+def user_index(request):
+    my_beers = TheBeer.objects.filter(user=request.user)
+    return render(request, 'allbeers/index.html', {'my_beers': my_beers})
+
+@login_required
 def beer_details(request, beer_id):
     beer = TheBeer.objects.get(id=beer_id)
     # print('beer_details' , beer.id)
@@ -38,7 +43,7 @@ def beer_details(request, beer_id):
     beersampling_form = BeerSamplingForm()
     return render(request, 'beercollection/details.html', {'beer':beer, 'beersampling_form': beersampling_form, 'hops': hops_beer_doesnt_have})
 
-@Login_required
+@login_required
 def add_photo(request, beer_id):
     photo_file = request.FILES.get('photo-file', None)
     if photo_file:
@@ -54,7 +59,7 @@ def add_photo(request, beer_id):
             print('An error occured uploading file to S3')
     return redirect('details', beer_id=beer_id)
 
-@Login_required
+@login_required
 def add_beersampling(request, beer_id):
     form = BeerSamplingForm(request.POST)
     if form.is_valid():
@@ -63,7 +68,7 @@ def add_beersampling(request, beer_id):
         new_beersampling.save()
     return redirect('details', beer_id=beer_id)
 
-@Login_required
+@login_required
 def assoc_hop(request, beer_id, hop_id):
     TheBeer.objects.get(id=beer_id).hops.add(hop_id)
     return redirect('details', beer_id=beer_id)
@@ -93,7 +98,7 @@ class BeerCreate(LoginRequiredMixin, CreateView):
 
 class BeerUpdate(LoginRequiredMixin, UpdateView):
     model = TheBeer
-    fields = ['name', 'style', 'abv', 'url_site']
+    fields = ['name', 'style', 'abv', 'url_site', 'user']
     def get_success_url(self, **kwargs):
         return reverse('details', args=(self.object.id,))
 
