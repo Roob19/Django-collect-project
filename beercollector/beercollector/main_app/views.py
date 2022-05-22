@@ -5,7 +5,13 @@ import uuid
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
 from django.urls import reverse
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .models import TheBeer, Hop, Photo
 from .forms import BeerSamplingForm
 
@@ -18,10 +24,12 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
+@Login_required
 def beer_index(request):
     all_beers = TheBeer.objects.all()
     return render(request, 'beercollection/index.html', {'all_beers': all_beers})
 
+@Login_required
 def beer_details(request, beer_id):
     beer = TheBeer.objects.get(id=beer_id)
     # print('beer_details' , beer.id)
@@ -30,6 +38,7 @@ def beer_details(request, beer_id):
     beersampling_form = BeerSamplingForm()
     return render(request, 'beercollection/details.html', {'beer':beer, 'beersampling_form': beersampling_form, 'hops': hops_beer_doesnt_have})
 
+@Login_required
 def add_photo(request, beer_id):
     photo_file = request.FILES.get('photo-file', None)
     if photo_file:
@@ -45,6 +54,7 @@ def add_photo(request, beer_id):
             print('An error occured uploading file to S3')
     return redirect('details', beer_id=beer_id)
 
+@Login_required
 def add_beersampling(request, beer_id):
     form = BeerSamplingForm(request.POST)
     if form.is_valid():
@@ -53,11 +63,26 @@ def add_beersampling(request, beer_id):
         new_beersampling.save()
     return redirect('details', beer_id=beer_id)
 
+@Login_required
 def assoc_hop(request, beer_id, hop_id):
     TheBeer.objects.get(id=beer_id).hops.add(hop_id)
     return redirect('details', beer_id=beer_id)
 
-class BeerCreate(CreateView):
+def signup(request):
+    error_message = ''
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('index')
+        else:
+            error_message = 'Invalid sign up - try again'
+    form = UserCreationForm()
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'registration/signup.html', context)
+
+class BeerCreate(LoginRequiredMixin, CreateView):
     model = TheBeer
     fields = ['brewery', 'name', 'style', 'abv', 'url_site']
     # def get_success_url(self, **kwargs):
@@ -66,12 +91,12 @@ class BeerCreate(CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-class BeerUpdate(UpdateView):
+class BeerUpdate(LoginRequiredMixin, UpdateView):
     model = TheBeer
     fields = ['name', 'style', 'abv', 'url_site']
     def get_success_url(self, **kwargs):
         return reverse('details', args=(self.object.id,))
 
-class BeerDelete(DeleteView):
+class BeerDelete(LoginRequiredMixin, DeleteView):
     model = TheBeer
     success_url = '/allbeers/'
